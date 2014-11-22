@@ -7,8 +7,6 @@ gem 'omniauth-browserid-discourse', '0.0.2', require_name: 'omniauth-browserid'
 
 class PersonaAuthenticator < ::Auth::Authenticator
 
-  SETTINGS = YAML.load_file("#{Rails.root}/config/mozillians.yml")
-
   def name
     "persona"
   end
@@ -32,31 +30,37 @@ class PersonaAuthenticator < ::Auth::Authenticator
   end
 
   def mozillians_magic(user)
-    mozillians_url = SETTINGS["mozillians_url"]
-    app_name = SETTINGS["app_name"]
-    app_key = SETTINGS["app_key"]
-    email = user.email
+    if SiteSetting.mozillians_enabled
+      mozillians_url = SiteSetting.mozillians_url
+      app_name = SiteSetting.mozillians_app_name
+      app_key = SiteSetting.mozillians_app_key
+      email = user.email
 
-    uri = URI.parse("#{mozillians_url}/api/v1/users/?app_name=#{app_name}&app_key=#{app_key}&email=#{email}")
+      uri = URI.parse("#{mozillians_url}/api/v1/users/?app_name=#{app_name}&app_key=#{app_key}&email=#{email}")
     
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Get.new(uri.request_uri)
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.request_uri)
 
-    response = http.request(request) 
+      response = http.request(request) 
 
-    if response.code == "200"
-      res = JSON.parse(response.body)
-      is_vouched = res["objects"].first["is_vouched"]
+      if response.code == "200"
+        res = JSON.parse(response.body)
+        is_vouched = res["objects"].first["is_vouched"]
 
-      case is_vouched
-      when false
-        remove_from_group(user, "mozillians_vouched")
-        add_to_group(user, "mozillians")
-        add_to_group(user, "mozillians_unvouched")
-      when true
-        remove_from_group(user, "mozillians_unvouched")
-        add_to_group(user, "mozillians")
-        add_to_group(user, "mozillians_vouched")
+        mozillians = SiteSetting.mozillians_group_everybody
+        mozillians_unvouched = SiteSetting.mozillians_group_unvouched
+        mozillians_vouched = SiteSetting.mozillians_group_vouched
+
+        case is_vouched
+        when false
+          remove_from_group(user, mozillians_vouched)
+          add_to_group(user, mozillians)
+          add_to_group(user, mozillians_unvouched)
+        when true
+          remove_from_group(user, mozillians_unvouched)
+          add_to_group(user, mozillians)
+          add_to_group(user, mozillians_vouched)
+        end
       end
     end
   end

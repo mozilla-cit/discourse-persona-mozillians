@@ -1,0 +1,15 @@
+plugins:
+  mozillians_enabled:
+    default: false
+  mozillians_url:
+    default: "http://demo5785564.mockable.io"
+  mozillians_app_name:
+    default: "foobar"
+  mozillians_app_key:
+    default: "12345"
+  mozillians_group_everybody:
+    default: "mozillians"
+  mozillians_group_unvouched:
+    default: "mozillians_unvouched"
+  mozillians_group_vouched:
+    default: "mozillians_vouched"

@@ -1,0 +1,9 @@
+en:
+  site_settings:
+    mozillians_enabled: "Enable Mozillians support"
+    mozillians_url: "URL of Mozillians instance"
+    mozillians_app_name: "Name of App"
+    mozillians_app_key: "Mozillians Key"
+    mozillians_group_everybody: "Name of the group everybody (vouched and unvouched) will be put in"
+    mozillians_group_unvouched: "Name of the group unvouched Mozillians will be put in"
+    mozillians_group_vouched: "Name of the group vouched Mozillians will be put in"
