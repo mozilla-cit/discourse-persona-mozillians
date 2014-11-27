@@ -2,7 +2,7 @@ plugins:
   mozillians_enabled:
     default: false
   mozillians_url:
-    default: "http://demo5785564.mockable.io"
+    default: "https://mozillians.org"
   mozillians_app_name:
     default: "foobar"
   mozillians_app_key:
