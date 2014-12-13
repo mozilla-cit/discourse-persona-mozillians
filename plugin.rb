@@ -29,6 +29,16 @@ class PersonaAuthenticator < ::Auth::Authenticator
     end
   end
 
+  def purge_from_groups(user)
+    group_prefix = SiteSetting.mozillians_group_prefix
+    remove_from_group(user, group_prefix)
+
+    groups = Group.where("name LIKE '#{group_prefix}*_%' ESCAPE '*'")
+    groups.each do |group|
+      remove_from_group(user, group.name)
+    end
+  end
+
   def mozillians_magic(user)
     if SiteSetting.mozillians_enabled
       mozillians_url = SiteSetting.mozillians_url
@@ -67,12 +77,17 @@ class PersonaAuthenticator < ::Auth::Authenticator
               add_to_group(user, "#{group_prefix}_vouched")
             end
 
+          else
+            purge_from_groups(user)
           end
 
+        else
+          purge_from_groups(user)
         end
 
       rescue SocketError => details
         puts "Failed to query API: #{details}"
+        purge_from_groups(user)
       end
 
     end
