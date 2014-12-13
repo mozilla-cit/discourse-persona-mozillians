@@ -54,19 +54,17 @@ class PersonaAuthenticator < ::Auth::Authenticator
           if total_count == 1 
             is_vouched = res["objects"].first["is_vouched"]
 
-            mozillians = SiteSetting.mozillians_group_everybody
-            mozillians_unvouched = SiteSetting.mozillians_group_unvouched
-            mozillians_vouched = SiteSetting.mozillians_group_vouched
+            group_prefix = SiteSetting.mozillians_group_prefix
 
             case is_vouched
             when false
-              remove_from_group(user, mozillians_vouched)
-              add_to_group(user, mozillians)
-              add_to_group(user, mozillians_unvouched)
+              remove_from_group(user, "#{group_prefix}_vouched")
+              add_to_group(user, group_prefix)
+              add_to_group(user, "#{group_prefix}_unvouched")
             when true
-              remove_from_group(user, mozillians_unvouched)
-              add_to_group(user, mozillians)
-              add_to_group(user, mozillians_vouched)
+              remove_from_group(user, "#{group_prefix}_unvouched")
+              add_to_group(user, group_prefix)
+              add_to_group(user, "#{group_prefix}_vouched")
             end
 
           end
