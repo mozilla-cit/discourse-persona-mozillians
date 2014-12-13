@@ -8,3 +8,4 @@ en:
     mozillians_group_everybody: "Name of the group everybody (vouched and unvouched) will be put in"
     mozillians_group_unvouched: "Name of the group unvouched Mozillians will be put in"
     mozillians_group_vouched: "Name of the group vouched Mozillians will be put in"
+    mozillians_enable_reviewed_features: "Enable features using reviewed API access (must have a reviewed API key)"

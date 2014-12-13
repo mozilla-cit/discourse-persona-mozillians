@@ -15,3 +15,5 @@ plugins:
     default: "mozillians_unvouched"
   mozillians_group_vouched:
     default: "mozillians_vouched"
+  mozillians_enable_reviewed_features:
+    default: false
