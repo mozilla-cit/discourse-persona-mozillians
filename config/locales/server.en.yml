@@ -1,6 +1,7 @@
 en:
   site_settings:
     mozillians_enabled: "Enable Mozillians support"
+    mozillians_enable_ssl: "Enable HTTPS support (DO NOT DISABLE ON PROD)"
     mozillians_url: "URL of Mozillians instance"
     mozillians_app_name: "Name of App"
     mozillians_app_key: "Mozillians Key"

@@ -39,7 +39,9 @@ class PersonaAuthenticator < ::Auth::Authenticator
       uri = URI.parse("#{mozillians_url}/api/v1/users/?app_name=#{app_name}&app_key=#{app_key}&email=#{email}")
     
       http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
+      if SiteSetting.mozillians_enable_ssl
+        http.use_ssl = true
+      end
       request = Net::HTTP::Get.new(uri.request_uri)
 
       response = http.request(request) 

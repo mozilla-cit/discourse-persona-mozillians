@@ -1,6 +1,8 @@
 plugins:
   mozillians_enabled:
     default: false
+  mozillians_enable_ssl:
+    default: true
   mozillians_url:
     default: "https://mozillians.org"
   mozillians_app_name:
