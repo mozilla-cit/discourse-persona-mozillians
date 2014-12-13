@@ -36,39 +36,47 @@ class PersonaAuthenticator < ::Auth::Authenticator
       app_key = SiteSetting.mozillians_app_key
       email = user.email
 
-      uri = URI.parse("#{mozillians_url}/api/v1/users/?app_name=#{app_name}&app_key=#{app_key}&email=#{email}")
-    
-      http = Net::HTTP.new(uri.host, uri.port)
-      if SiteSetting.mozillians_enable_ssl
-        http.use_ssl = true
-      end
-      request = Net::HTTP::Get.new(uri.request_uri)
+      begin
+        uri = URI.parse("#{mozillians_url}/api/v1/users/?app_name=#{app_name}&app_key=#{app_key}&email=#{email}")
 
-      response = http.request(request) 
-
-      if response.code == "200"
-        res = JSON.parse(response.body)
-        total_count = res["meta"]["total_count"]
-
-        if total_count == 1 
-          is_vouched = res["objects"].first["is_vouched"]
-
-          mozillians = SiteSetting.mozillians_group_everybody
-          mozillians_unvouched = SiteSetting.mozillians_group_unvouched
-          mozillians_vouched = SiteSetting.mozillians_group_vouched
-
-          case is_vouched
-          when false
-            remove_from_group(user, mozillians_vouched)
-            add_to_group(user, mozillians)
-            add_to_group(user, mozillians_unvouched)
-          when true
-            remove_from_group(user, mozillians_unvouched)
-            add_to_group(user, mozillians)
-            add_to_group(user, mozillians_vouched)
-          end
+        http = Net::HTTP.new(uri.host, uri.port)
+        if SiteSetting.mozillians_enable_ssl
+          http.use_ssl = true
         end
+        request = Net::HTTP::Get.new(uri.request_uri)
+
+        response = http.request(request) 
+
+        if response.code == "200"
+          res = JSON.parse(response.body)
+          total_count = res["meta"]["total_count"]
+
+          if total_count == 1 
+            is_vouched = res["objects"].first["is_vouched"]
+
+            mozillians = SiteSetting.mozillians_group_everybody
+            mozillians_unvouched = SiteSetting.mozillians_group_unvouched
+            mozillians_vouched = SiteSetting.mozillians_group_vouched
+
+            case is_vouched
+            when false
+              remove_from_group(user, mozillians_vouched)
+              add_to_group(user, mozillians)
+              add_to_group(user, mozillians_unvouched)
+            when true
+              remove_from_group(user, mozillians_unvouched)
+              add_to_group(user, mozillians)
+              add_to_group(user, mozillians_vouched)
+            end
+
+          end
+
+        end
+
+      rescue SocketError => details
+        puts "Failed to query API: #{details}"
       end
+
     end
   end
 
