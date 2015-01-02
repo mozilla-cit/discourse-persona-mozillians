@@ -11,3 +11,5 @@ plugins:
     default: "12345"
   mozillians_group_prefix:
     default: "mozillians"
+  mozillians_enable_reviewed_features:
+    default: false

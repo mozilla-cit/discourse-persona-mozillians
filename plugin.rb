@@ -77,6 +77,18 @@ class PersonaAuthenticator < ::Auth::Authenticator
               add_to_group(user, "#{group_prefix}_vouched")
             end
 
+            if SiteSetting.mozillians_enable_reviewed_features
+              # I'm sorry...
+              is_nda = res["objects"].first["groups"][4..-5].split("',), (u'").grep(/^nda$/).length == 1
+              case is_nda
+              when false
+                remove_from_group(user, "#{group_prefix}_nda")
+              when true
+                add_to_group(user, "#{group_prefix}_nda")
+              end
+
+            end
+
           else
             purge_from_groups(user)
           end

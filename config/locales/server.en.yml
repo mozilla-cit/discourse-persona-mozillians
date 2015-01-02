@@ -6,3 +6,4 @@ en:
     mozillians_app_name: "Name of App"
     mozillians_app_key: "Mozillians Key"
     mozillians_group_prefix: "Prefix to add to group names from Mozillians"
+    mozillians_enable_reviewed_features: "Enable features using reviewed API access (must have a reviewed API key)"
