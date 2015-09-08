@@ -41,7 +41,7 @@ class PersonaAuthenticator < ::Auth::Authenticator
 
   def mozillians_magic(user)
     return unless SiteSetting.mozillians_enabled
-    
+
     mozillians_url = SiteSetting.mozillians_url
     app_name = SiteSetting.mozillians_app_name
     app_key = SiteSetting.mozillians_app_key
@@ -54,13 +54,13 @@ class PersonaAuthenticator < ::Auth::Authenticator
       http.use_ssl = true if SiteSetting.mozillians_enable_ssl
       request = Net::HTTP::Get.new(uri.request_uri)
 
-      response = http.request(request) 
+      response = http.request(request)
 
       if response.code.to_i == 200
         res = JSON.parse(response.body)
         total_count = res["meta"]["total_count"]
 
-        if total_count.to_i == 1 
+        if total_count.to_i == 1
           is_vouched = !!res["objects"].first["is_vouched"]
 
           group_prefix = SiteSetting.mozillians_group_prefix
@@ -71,7 +71,7 @@ class PersonaAuthenticator < ::Auth::Authenticator
             add_to_group(user, "#{group_prefix}_vouched")
           else
             remove_from_group(user, "#{group_prefix}_vouched")
-            add_to_group(user, "#{group_prefix}_unvouched")  
+            add_to_group(user, "#{group_prefix}_unvouched")
           end
 
         else
@@ -94,7 +94,7 @@ class PersonaAuthenticator < ::Auth::Authenticator
     result.email = auth_token[:info][:email]
     result.email_valid = true
 
-    result.user = User.find_by_email(result.email) 
+    result.user = User.find_by_email(result.email)
 
     mozillians_magic(result.user) if result.user.try(:id)
 
