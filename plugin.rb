@@ -1,7 +1,8 @@
 # name: discourse-persona-mozillians
 # about: persona login provider with some mozillians magic sprinkled on top
-# version: 1.0
+# version: 1.1
 # author: Vikhyat Korrapati, Leo McArdle
+# url: https://github.com/mozilla-cit/discourse-persona-mozillians
 
 gem 'omniauth-browserid-discourse', '0.0.2', require_name: 'omniauth-browserid'
 
